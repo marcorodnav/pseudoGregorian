@@ -26,12 +26,8 @@ public final class Calendario {
 		return this.esFechaValida(fecha.obtenerAnno(), fecha.obtenerMes(), fecha.obtenerDia());
 	}
 
-	public Fecha fechaFutura(Fecha fecha, Integer cantDias) {
-		return moverFecha(fecha, cantDias, diaSiguiente);
-	}
-
-	public Fecha fechaPasada(Fecha fecha, Integer cantDias) {
-		return moverFecha(fecha, cantDias, diaAnterior);
+	public Fecha diaSiguiente(Fecha fecha) {
+		return diaSiguiente.apply(fecha);
 	}
 
 	public Integer diaSemana(Fecha fecha) {
@@ -44,7 +40,31 @@ public final class Calendario {
 		}
 		return diaS;
 	}
-	
+
+	public Fecha fechaFutura(Fecha fecha, Integer cantDias) {
+		return moverFecha(fecha, cantDias, diaSiguiente);
+	}
+
+	public Fecha fechaPasada(Fecha fecha, Integer cantDias) {
+		return moverFecha(fecha, cantDias, diaAnterior);
+	}
+
+	public Integer diasEntre(Fecha fecha0, Fecha fecha1) {
+		return (fecha0.equals(fecha1) ? 0
+				: (fecha0.esMenor(fecha1) ? distanciaEnDias(fecha0, fecha1) : distanciaEnDias(fecha1, fecha0)));
+	}
+
+	private Integer distanciaEnDias(Fecha fechaMenor, Fecha fechaMayor) {
+		int count = 0;
+		Fecha menor = fechaMenor;
+		Fecha mayor = fechaMayor;
+		while (!menor.equals(mayor)) {
+			menor = diaSiguiente.apply(menor);
+			count++;
+		}
+		return count;
+	}
+
 	private Predicate<Integer> annioValido = anno -> anno > 1582;
 	private Predicate<Integer> mesValido = mes -> mes < 13 && mes > 0;
 	private Predicate<Fecha> diaDeMesValido = (Fecha fecha) -> fecha.obtenerDia() > 0

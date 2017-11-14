@@ -20,3 +20,6 @@
 
 # Bin folder
 /bin
+
+.classpath
+.project

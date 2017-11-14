@@ -2,7 +2,6 @@ package com.marco.calendar;
 
 import java.util.function.Predicate;
 
-
 public final class Calendario {
 
 	private static Calendario calendario;
@@ -30,27 +29,74 @@ public final class Calendario {
 	public boolean esFechaValida(Fecha fecha) {
 		return this.esFechaValida(fecha.obtenerAnno(), fecha.obtenerMes(), fecha.obtenerDia());
 	}
-	
+
 	public Fecha diaSiguiente(Fecha fecha) {
 		Fecha nueva = null;
 		if (esFechaValida(fecha)) {
-			Integer dia = (fecha.obtenerDia() == diasMaxMes(fecha) ? 1 : fecha.obtenerDia()+1);
-			Integer mes = (dia == 1 && fecha.obtenerMes() == 12) ? 1 : (dia == 1 ? fecha.obtenerMes() + 1 : fecha.obtenerMes());
+			Integer dia = (fecha.obtenerDia() == diasMaxMes(fecha) ? 1 : fecha.obtenerDia() + 1);
+			Integer mes = (dia == 1 && fecha.obtenerMes() == 12) ? 1
+					: (dia == 1 ? fecha.obtenerMes() + 1 : fecha.obtenerMes());
 			Integer anno = (dia == 1 && mes == 1) ? fecha.obtenerAnno() + 1 : fecha.obtenerAnno();
-			nueva = new Fecha(anno,mes,dia); 
+			nueva = new Fecha(anno, mes, dia);
 		}
-		return nueva; 
+		return nueva;
 	}
 	
+	public Fecha diaAnterior(Fecha fecha) {
+		Fecha nueva = null;
+		if (esFechaValida(fecha)) {
+			Integer dia;
+			if (fecha.obtenerDia() == 1 && fecha.obtenerMes() == 1) {
+				dia = diasMaxMes(12, fecha.obtenerAnno()-1);
+			} else if (fecha.obtenerDia() == 1) {
+				dia = diasMaxMes(fecha.obtenerMes()-1, fecha.obtenerAnno());
+			} else {
+				dia = fecha.obtenerDia() - 1;
+			}
+			Integer mes;
+			if (dia == diasMaxMes(12, fecha.obtenerAnno() -1)) {
+				mes = 12;
+			} else if (dia == diasMaxMes(fecha.obtenerMes() - 1, fecha.obtenerAnno())) {
+				mes = fecha.obtenerMes() - 1;
+			} else {
+				mes = fecha.obtenerMes();
+			}
+			Integer anno;
+			if (mes == 12 && dia == diasMaxMes(12,fecha.obtenerAnno()-1)) {
+				anno = fecha.obtenerAnno() - 1;
+			} else {
+				anno = fecha.obtenerAnno();
+			}
+			nueva = new Fecha(anno, mes, dia);
+		}
+		return nueva;
+	}
+
 	public Integer diaSemana(Fecha fecha) {
 		Integer diaS = -1;
 		if (esFechaValida(fecha)) {
 			int anno = fecha.obtenerAnno(), mes = fecha.obtenerMes(), dia = fecha.obtenerDia();
-			int[] meses = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
-			anno-= mes < 3 ? 1 : 0;
-			diaS =(anno + anno/4 - anno/100 + anno/400 + meses[mes-1] + dia) % 7;
+			int[] meses = { 0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4 };
+			anno -= mes < 3 ? 1 : 0;
+			diaS = (anno + anno / 4 - anno / 100 + anno / 400 + meses[mes - 1] + dia) % 7;
 		}
-		return diaS; 
+		return diaS;
+	}
+
+	public Fecha fechaFutura(Fecha fecha, Integer cantDias) {
+		Fecha nueva = new Fecha(fecha);
+		for (int i = 0; i < cantDias; i++) {
+			nueva = diaSiguiente(nueva);
+		}
+		return nueva;
+	}
+	
+	public Fecha fechaPasada(Fecha fecha, Integer cantDias) {
+		Fecha nueva = new Fecha(fecha);
+		for (int i = 0; i < cantDias; i++) {
+			nueva = diaAnterior(nueva);
+		}
+		return nueva;
 	}
 
 	private Integer diasMaxMes(Fecha fecha) {
@@ -70,6 +116,13 @@ public final class Calendario {
 			break;
 		}
 
+		return dias;
+	}
+	
+	private Integer diasMaxMes(Integer mes, Integer anno) {
+		int dias = 0;
+		Fecha fechaTemp = new Fecha(anno, mes, 1);
+		dias = this.diasMaxMes(fechaTemp);
 		return dias;
 	}
 

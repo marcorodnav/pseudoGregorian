@@ -14,6 +14,12 @@ public class Fecha {
 	public Fecha() {
 		this(1582,1,1);
 	}
+	
+	public Fecha(Fecha fecha) {
+		this.anno = fecha.obtenerAnno();
+		this.mes = fecha.obtenerMes();
+		this.dia = fecha.obtenerDia();
+	}
 
 	public int obtenerAnno() {
 		return this.anno;

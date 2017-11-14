@@ -5,7 +5,7 @@ public class Main {
 		Calendario calendario = Calendario.obtenerCalendario();
 		
 		Fecha hoy = new Fecha(2017, 1, 1);
-		Fecha pasada = calendario.fechaPasada(hoy, 30);
+		Fecha pasada = calendario.fechaPasada(hoy, 1);
 		System.out.println("Pasada con pasada 15 dias: "+ pasada.obtenerFechaGregoriana("/"));
 	}
 }

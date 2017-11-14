@@ -41,32 +41,18 @@ public final class Calendario {
 		}
 		return nueva;
 	}
-	
+
 	public Fecha diaAnterior(Fecha fecha) {
 		Fecha nueva = null;
 		if (esFechaValida(fecha)) {
-			Integer dia;
-			if (fecha.obtenerDia() == 1 && fecha.obtenerMes() == 1) {
-				dia = diasMaxMes(12, fecha.obtenerAnno()-1);
-			} else if (fecha.obtenerDia() == 1) {
-				dia = diasMaxMes(fecha.obtenerMes()-1, fecha.obtenerAnno());
-			} else {
-				dia = fecha.obtenerDia() - 1;
-			}
-			Integer mes;
-			if (dia == diasMaxMes(12, fecha.obtenerAnno() -1)) {
-				mes = 12;
-			} else if (dia == diasMaxMes(fecha.obtenerMes() - 1, fecha.obtenerAnno())) {
-				mes = fecha.obtenerMes() - 1;
-			} else {
-				mes = fecha.obtenerMes();
-			}
-			Integer anno;
-			if (mes == 12 && dia == diasMaxMes(12,fecha.obtenerAnno()-1)) {
-				anno = fecha.obtenerAnno() - 1;
-			} else {
-				anno = fecha.obtenerAnno();
-			}
+			Integer dia = (fecha.obtenerDia() == 1 && fecha.obtenerMes() == 1 ? diasMaxMes(12, fecha.obtenerAnno() - 1)
+					: (fecha.obtenerDia() == 1 ? diasMaxMes(fecha.obtenerMes() - 1, fecha.obtenerAnno())
+							: fecha.obtenerDia() - 1));
+			Integer mes = (dia == diasMaxMes(12, fecha.obtenerAnno() - 1) ? 12
+					: (dia == diasMaxMes(fecha.obtenerMes() - 1, fecha.obtenerAnno()) ? fecha.obtenerMes() - 1
+							: fecha.obtenerMes()));
+			Integer anno = (mes == 12 && dia == diasMaxMes(12, fecha.obtenerAnno() - 1) ? fecha.obtenerAnno() - 1
+					: fecha.obtenerAnno());
 			nueva = new Fecha(anno, mes, dia);
 		}
 		return nueva;
@@ -90,7 +76,7 @@ public final class Calendario {
 		}
 		return nueva;
 	}
-	
+
 	public Fecha fechaPasada(Fecha fecha, Integer cantDias) {
 		Fecha nueva = new Fecha(fecha);
 		for (int i = 0; i < cantDias; i++) {
@@ -118,7 +104,7 @@ public final class Calendario {
 
 		return dias;
 	}
-	
+
 	private Integer diasMaxMes(Integer mes, Integer anno) {
 		int dias = 0;
 		Fecha fechaTemp = new Fecha(anno, mes, 1);

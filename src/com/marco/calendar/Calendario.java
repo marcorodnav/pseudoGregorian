@@ -43,10 +43,14 @@ public final class Calendario {
 	}
 	
 	public Integer diaSemana(Fecha fecha) {
-		int anno = fecha.obtenerAnno(), mes = fecha.obtenerMes(), dia = fecha.obtenerDia();
-		int[] meses = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
-		anno-= mes < 3 ? 1 : 0;
-		return (anno + anno/4 - anno/100 + anno/400 + meses[mes-1] + dia) % 7;
+		Integer diaS = -1;
+		if (esFechaValida(fecha)) {
+			int anno = fecha.obtenerAnno(), mes = fecha.obtenerMes(), dia = fecha.obtenerDia();
+			int[] meses = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
+			anno-= mes < 3 ? 1 : 0;
+			diaS =(anno + anno/4 - anno/100 + anno/400 + meses[mes-1] + dia) % 7;
+		}
+		return diaS; 
 	}
 
 	private Integer diasMaxMes(Fecha fecha) {
